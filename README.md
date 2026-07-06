@@ -121,3 +121,11 @@ https://linkedin.com/in/ugur-akas
 
 GitHub:
 https://github.com/ugurakas
+
+![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v5.5-blue)
+
+![FreeRTOS](https://img.shields.io/badge/FreeRTOS-Supported-green)
+
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+![Language](https://img.shields.io/badge/Language-C-blue)
