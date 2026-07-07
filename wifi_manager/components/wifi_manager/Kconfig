@@ -1,0 +1,11 @@
+menu "WiFi Manager"
+
+config WIFI_MANAGER_MAXIMUM_RETRY
+    int "Maximum Retry Count"
+    default 5
+
+config WIFI_MANAGER_AUTO_RECONNECT
+    bool "Enable Auto Reconnect"
+    default y
+
+endmenu
