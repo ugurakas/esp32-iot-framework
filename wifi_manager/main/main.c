@@ -1,8 +1,8 @@
 wifi_manager_init();
 
 wifi_manager_connect(
-    "HomeWiFi",
-    "12345678"
+    "UğurHomeWiFi",
+    "123456789"
 );
 
 while(1)
