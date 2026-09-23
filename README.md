@@ -113,7 +113,13 @@ and signing configuration consistent across updates.
 ## Validation
 
 GitHub Actions builds both the base and SMP UDP profiles, including MCUboot,
-and uploads firmware plus resolved Kconfig/DTS artifacts. A successful build
+and uploads firmware plus resolved Kconfig/DTS artifacts. Native simulator tests
+cover settings validation, restoration, and failed-write consistency:
+
+```sh
+ZEPHYR_TOOLCHAIN_VARIANT=host west build -b native_sim/native/64 esp32-iot-framework/tests/config_store -d build-tests
+west build -d build-tests -t run
+``` A successful build
 does not replace tests on a physical ESP32-S3.
 
 Hardware acceptance checklist:
