@@ -58,6 +58,7 @@ jobs:
         shell: bash
         run: |
           grep -q '^CONFIG_WIFI_ESP32=y' build/esp32-iot-framework/zephyr/.config
+          grep -q '^CONFIG_BOOT_SIGNATURE_TYPE_RSA=y' build/mcuboot/zephyr/.config
           grep -q '^CONFIG_SETTINGS_NVS=y' build/esp32-iot-framework/zephyr/.config
           if [ "${{ matrix.profile }}" = ota ]; then
             grep -q '^CONFIG_MCUMGR_TRANSPORT_UDP=y' build/esp32-iot-framework/zephyr/.config
