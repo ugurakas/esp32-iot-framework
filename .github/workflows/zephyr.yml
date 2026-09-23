@@ -8,6 +8,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -41,7 +42,7 @@ jobs:
         if: matrix.profile == 'base'
         run: |
           ZEPHYR_TOOLCHAIN_VARIANT=host west build -b native_sim/native/64 esp32-iot-framework/tests/config_store -d build-tests
-          west build -d build-tests -t run
+          timeout 60s west build -d build-tests -t run
       - name: Build MCUboot and application
         shell: bash
         run: |
