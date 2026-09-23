@@ -11,6 +11,9 @@ K_MUTEX_DEFINE(config_lock);
 
 static char *field(const char *key, size_t *size)
 {
+    if (!key) {
+        return NULL;
+    }
     if (!strcmp(key, "ssid")) {
         *size = sizeof(config.ssid);
         return config.ssid;
