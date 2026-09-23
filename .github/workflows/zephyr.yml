@@ -1,0 +1,58 @@
+name: Zephyr
+on:
+  push:
+    branches: [zephyr-port]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [base, ota]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: esp32-iot-framework
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Host dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build gperf ccache dfu-util device-tree-compiler wget xz-utils file make gcc g++ libsdl2-dev
+          pip install west
+      - name: Zephyr workspace
+        run: |
+          west init -l esp32-iot-framework
+          west update --narrow -o=--depth=1
+          west zephyr-export
+          pip install -r zephyr/scripts/requirements.txt
+          west blobs fetch hal_espressif
+      - name: ESP32-S3 toolchain
+        run: |
+          wget -q https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/zephyr-sdk-0.17.0_linux-x86_64_minimal.tar.xz
+          tar xf zephyr-sdk-0.17.0_linux-x86_64_minimal.tar.xz
+          cd zephyr-sdk-0.17.0
+          ./setup.sh -t xtensa-espressif_esp32s3_zephyr-elf -c
+      - name: Build MCUboot and application
+        shell: bash
+        run: |
+          extra=()
+          if [ "${{ matrix.profile }}" = ota ]; then
+            extra+=("-DEXTRA_CONF_FILE=conf/ota-udp.conf")
+          fi
+          west build -b esp32s3_devkitc/esp32s3/procpu --sysbuild esp32-iot-framework -d build -- "${extra[@]}"
+      - name: Upload firmware and resolved configuration
+        uses: actions/upload-artifact@v4
+        with:
+          name: esp32s3-${{ matrix.profile }}
+          path: |
+            build/**/zephyr/*.bin
+            build/**/zephyr/*.hex
+            build/**/zephyr/.config
+            build/**/zephyr/zephyr.dts

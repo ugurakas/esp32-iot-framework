@@ -1,0 +1,15 @@
+manifest:
+  version: "0.13"
+  projects:
+    - name: zephyr
+      url: https://github.com/zephyrproject-rtos/zephyr
+      revision: v4.1.0
+      import:
+        name-allowlist:
+          - cmsis
+          - hal_espressif
+          - mbedtls
+          - mcuboot
+          - zcbor
+  self:
+    path: esp32-iot-framework

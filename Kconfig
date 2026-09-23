@@ -1,0 +1,13 @@
+mainmenu "ESP32-S3 IoT framework"
+source "Kconfig.zephyr"
+
+menu "IoT application"
+config APP_WIFI_RETRY_SECONDS
+    int "Delay between Wi-Fi connection attempts"
+    range 1 300
+    default 10
+config APP_MQTT_PUBLISH_SECONDS
+    int "Telemetry interval"
+    range 1 3600
+    default 30
+endmenu
