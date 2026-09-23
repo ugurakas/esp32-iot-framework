@@ -47,9 +47,17 @@ jobs:
         run: |
           extra=()
           if [ "${{ matrix.profile }}" = ota ]; then
-            extra+=("-DEXTRA_CONF_FILE=conf/ota-udp.conf")
+            extra+=("-Desp32-iot-framework_EXTRA_CONF_FILE=conf/ota-udp.conf")
           fi
           west build -b esp32s3_devkitc/esp32s3/procpu --sysbuild esp32-iot-framework -d build -- "${extra[@]}"
+      - name: Verify enabled features
+        shell: bash
+        run: |
+          grep -q '^CONFIG_WIFI_ESP32=y' build/esp32-iot-framework/zephyr/.config
+          grep -q '^CONFIG_SETTINGS_NVS=y' build/esp32-iot-framework/zephyr/.config
+          if [ "${{ matrix.profile }}" = ota ]; then
+            grep -q '^CONFIG_MCUMGR_TRANSPORT_UDP=y' build/esp32-iot-framework/zephyr/.config
+          fi
       - name: Upload firmware and resolved configuration
         uses: actions/upload-artifact@v4
         with:

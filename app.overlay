@@ -1,0 +1,4 @@
+/* Enable the on-chip station radio on the ESP32-S3 target. */
+&wifi {
+    status = "okay";
+};

@@ -26,8 +26,8 @@ reconnects after network loss. It publishes QoS 0 JSON uptime to
 trusted development LAN; TLS and broker authentication are not implemented in
 this initial port. Do not expose this transport to untrusted networks.
 
-The board's upstream flash partitions are used directly. No custom overlay is
-needed for this board. Compile-time assertions require both MCUboot slots and
+The board's upstream flash partitions are used directly. The application overlay enables the on-chip Wi-Fi radio;
+it does not change flash partitions. Compile-time assertions require both MCUboot slots and
 the settings partition. For another flash size or board, verify its DTS and
 MCUboot partition layout before flashing; do not assume an arbitrary ESP32-S3
 module is identical to the DevKitC.
@@ -80,7 +80,7 @@ Do not commit local credentials, signing keys or private configuration.
 Enable network updates explicitly:
 
 ```sh
-west build -p always -b esp32s3_devkitc/esp32s3/procpu --sysbuild esp32-iot-framework -d build-ota -- -DEXTRA_CONF_FILE=conf/ota-udp.conf
+west build -p always -b esp32s3_devkitc/esp32s3/procpu --sysbuild esp32-iot-framework -d build-ota -- -Desp32-iot-framework_EXTRA_CONF_FILE=conf/ota-udp.conf
 west flash -d build-ota
 ```
 
