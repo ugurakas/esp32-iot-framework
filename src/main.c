@@ -1,6 +1,7 @@
 #include "config_store.h"
 #include "wifi_manager.h"
 #include "mqtt_service.h"
+#include "ota_service.h"
 #include <zephyr/logging/log.h>
 
 LOG_MODULE_REGISTER(app);
@@ -8,7 +9,11 @@ LOG_MODULE_REGISTER(app);
 int main(void)
 {
     static struct app_config config;
-    int err = config_store_init();
+    int err = ota_service_init();
+    if (err) {
+        LOG_ERR("OTA transport initialization failed: %d", err);
+    }
+    err = config_store_init();
     if (err) {
         LOG_ERR("Settings initialization failed: %d", err);
         return 0;
