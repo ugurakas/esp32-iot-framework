@@ -17,7 +17,7 @@ static atomic_t state;
 static atomic_t associated;
 static struct k_work_delayable connect_work;
 static struct k_work_q wifi_queue;
-K_THREAD_STACK_DEFINE(wifi_stack, 3072);
+K_THREAD_STACK_DEFINE(app_wifi_stack, 3072);
 K_SEM_DEFINE(ready, 0, 1);
 
 static void retry(void)
@@ -105,7 +105,7 @@ int wifi_manager_init(const char *ssid, const char *password)
         .mfp = WIFI_MFP_OPTIONAL,
         .timeout = 20,
     };
-    k_work_queue_start(&wifi_queue, wifi_stack, K_THREAD_STACK_SIZEOF(wifi_stack),
+    k_work_queue_start(&wifi_queue, app_wifi_stack, K_THREAD_STACK_SIZEOF(app_wifi_stack),
                        6, NULL);
     k_work_init_delayable(&connect_work, connect_handler);
     net_mgmt_init_event_callback(&wifi_cb, wifi_event,
